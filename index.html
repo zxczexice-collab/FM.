@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Football Manager</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@900&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.menu {     z-index: 3;
+
+    position: absolute;
+
+        z-index: 2;
+
+    left: 5%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity 1s ease;
+}
+
+.menu.show {
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+}
+
+.menu {
+
+    position: absolute;
+
+    left: 5%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+}
+
+
+.menu button {
+
+    position: relative;
+
+    width: 270px;
+
+    height: 52px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    border-radius: 12px;
+
+    background: rgba(25,25,35,0.85);
+
+    color: white;
+
+    font-family: "Geist", sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+    text-align: left;
+
+    padding-left: 25px;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(10px);
+
+    transition:
+
+    transform 0.25s ease,
+
+    background 0.35s ease,
+
+    box-shadow 0.35s ease;
+
+}
+
+
+/* фиолетовая линия слева */
+
+.menu button::before {
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:5px;
+
+    height:100%;
+
+    background:#8b4dff;
+
+    transition:0.35s ease;
+
+}
+
+
+/* наведение */
+
+.menu button:hover {
+
+    transform: translateX(10px);
+
+    background:rgba(139,77,255,0.18);
+
+    box-shadow:
+
+    0 0 25px rgba(139,77,255,0.35);
+
+}
+
+
+.menu button:hover::before {
+
+    width:100%;
+
+    opacity:0.15;
+
+}
+
+
+/* нажатие */
+
+.menu button:active {
+
+    transform:scale(0.96);
+
+    background:white;
+
+    color:#6c35c9;
+
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+  
+   position: relative;
+
+    background:
+    radial-gradient(circle at center, rgba(50,70,160,0.25), transparent 45%),
+    linear-gradient(135deg, #171336, #08091f);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-screen {
+
+    position: fixed;
+
+    inset: 0;
+
+    background-image: url("ImagesFM/backgroundFM.webp");
+
+    background-size: cover;
+
+    background-position: center;
+
+    opacity: 0;
+
+    transition: opacity 1s ease;
+
+    z-index: 1;
+
+}
+
+/* лёгкая текстура фона */
+body::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%);
+
+    background-size: 100px 100px;
+
+    opacity: 0.3;
+
+}
+
+
+/* логотип */
+
+.logo {
+
+    position: relative;
+
+    color: white;
+
+    font-family: "Geist", sans-serif;
+
+    font-weight: 900;
+
+    text-align: center;
+
+    text-transform: uppercase;
+
+
+    font-size: clamp(50px, 7vw, 90px);
+
+
+    line-height: 0.85;
+
+
+    letter-spacing: -4px;
+
+
+    text-shadow:
+
+    0 10px 30px rgba(0,0,0,0.7);
+
+
+    animation: intro 2s ease forwards;
+
+   z-index: 2;
+}
+
+
+/* появление */
+
+@keyframes intro {
+
+
+    from {
+
+        opacity:0;
+
+        transform: scale(0.85);
+
+        filter: blur(10px);
+
+    }
+
+
+    to {
+
+        opacity:1;
+
+        transform: scale(1);
+
+        filter: blur(0);
+
+    }
+
+}
+
+
+/* маленькая линия снизу логотипа */
+
+.line {
+
+    width: 180px;
+
+    height: 3px;
+
+    background:white;
+
+    margin:25px auto 0;
+
+    opacity:0.8;
+
+    animation: line 2s ease forwards;
+
+}
+
+
+@keyframes line {
+
+    from {
+
+        width:0;
+
+        opacity:0;
+
+    }
+
+
+    to {
+
+        width:180px;
+
+        opacity:0.8;
+
+    }
+
+}
+
+.settings-screen {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:#f5f5f7;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:opacity 0.5s ease;
+
+    z-index:4;
+
+}
+
+
+
+.settings-screen.show {
+
+    opacity: 1;
+
+}
+
+
+.settings-panel {
+
+    position: fixed;
+
+    inset: 0;
+
+    width:100%;
+    height:100%;
+
+    padding:50px;
+
+    background: transparent;
+
+    color:#171336;
+
+    font-family:"Geist", sans-serif;
+
+    opacity:0;
+
+    transform:translateY(30px);
+
+    pointer-events:none;
+
+    transition:0.5s ease;
+
+    z-index:5;
+
+    overflow-y:auto;
+
+}
+
+
+
+
+.settings-panel.show {
+
+    opacity:1;
+
+    transform:translateY(0);
+
+    pointer-events:auto;
+
+}
+
+.settings-layout {
+
+    display:flex;
+
+    gap:50px;
+
+    margin-top:50px;
+
+}
+
+
+.settings-menu {
+
+    width:300px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+.settings-menu button {
+
+    width: 260px;
+    height: 58px;
+
+    background: white;
+
+    border: 2px solid #171336;
+
+    border-radius: 14px;
+
+    color: #6c35c9;
+
+    font-family: "Geist", sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    text-align: left;
+
+    padding-left: 22px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.settings-menu button:hover {
+
+    background: #6c35c9;
+
+    color: white;
+
+    transform: translateX(8px);
+
+}
+
+.settings-menu button.active {
+
+    background: #6c35c9;
+
+    color: white;
+
+}
+
+
+.settings-content {
+
+    flex:1;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:40px;
+
+    min-height:500px;
+
+}
+
+
+.settings-content h2 {
+
+    color:#171336;
+
+    font-size:32px;
+
+}
+
+
+.settings-content p {
+
+    color:#555;
+
+    margin-top:15px;
+
+}
+
+.back-button {
+
+    position: fixed;
+
+    left: 50px;
+
+    bottom: 40px;
+
+    width: 220px;
+
+    height: 58px;
+
+    background: white;
+
+    border: 2px solid #171336;
+
+    border-radius: 14px;
+
+    color: #6c35c9;
+
+    font-family: "Geist", sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.back-button:hover {
+
+    background: #6c35c9;
+
+    color: white;
+
+}
+
+.settings-header {
+
+    position:absolute;
+
+    top:25px;
+
+    left:35px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+.settings-header h1 {
+
+    margin:0;
+
+    color:#6c35c9;
+
+    font-size:42px;
+
+    letter-spacing:2px;
+
+}
+
+
+.settings-header h1 {
+
+    color:#6c35c9;
+
+    font-size:42px;
+
+    letter-spacing:2px;
+
+}
+
+
+.close-settings {
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    border:2px solid #171336;
+
+    background:white;
+
+    color:#d62828;
+
+    font-size:22px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:.25s;
+
+   line-height:1;
+
+   padding-bottom:3px;
+}
+
+
+.close-settings:hover {
+
+    background:#d62828;
+
+    color:white;
+
+    transform:scale(1.1);
+
+}
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="logo">
+
+    FOOTBALL<br>
+
+    MANAGER
+
+    <div class="line"></div>
+
+</div>
+
+<div class="menu-screen"></div>
+
+<div class="settings-screen"></div>
+
+<div class="settings-panel">
+
+<div class="settings-header">
+
+    <button class="close-settings">✕</button>
+
+    <h1>SETTINGS</h1>
+
+</div>
+
+<div class="settings-layout">
+
+    <div class="settings-menu">
+
+        <button>SOUND</button>
+        <button>GRAPHICS</button>
+        <button>CURRENCY</button>
+        <button>ADVANCED</button>
+
+    </div>
+
+
+   <div class="settings-content">
+
+    <h2>SELECT OPTION</h2>
+
+    <p>
+        Choose a category to customize your game experience
+    </p>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<div class="menu">
+
+<button>NEW CAREER</button>
+<button>ACHIEVEMENTS</button>
+<button>TUTORIAL</button>
+<button>SETTINGS</button>
+<button>ABOUT US</button>
+
+</div>
+
+<audio id="menuMusic"></audio>
+
+<script>
+
+setTimeout(() => {
+
+    const logo = document.querySelector(".logo");
+    const menu = document.querySelector(".menu");
+
+    logo.style.transition = "opacity 1s ease";
+    logo.style.opacity = "0";
+
+    setTimeout(() => {
+
+        logo.style.display = "none";
+        
+        const menuBg = document.querySelector(".menu-screen");
+
+menuBg.style.opacity = "1";
+
+        menu.classList.add("show");
+
+        document.addEventListener("click", () => {
+    playSong(current);
+}, { once: true });
+
+    }, 1000);
+
+}, 3000);
+
+const player = document.getElementById("menuMusic");
+let musicVolume = 0.35;
+let effectsVolume = 1;
+
+
+
+
+const playlist = [
+    "AudioFM/AlwaysForever.mp3",
+    "AudioFM/GoLikeHell.mp3",
+    "AudioFM/HurryBelafonteJumpInTheLine.mp3",
+    "AudioFM/RobertDelongHere.mp3",
+    "AudioFM/TheNakedAndFamous.mp3",
+    "AudioFM/TheSilenceOfTheNight.mp3",
+    "AudioFM/TomOdellCan'tpredent.mp3"
+];
+
+let current = Math.floor(Math.random() * playlist.length);
+
+function playSong(index) {
+
+    player.src = playlist[index];
+
+    player.volume = musicVolume;
+
+    player.play();
+
+}
+
+player.addEventListener("ended", () => {
+
+    current++;
+
+    if (current >= playlist.length) current = 0;
+
+    playSong(current);
+
+});
+
+const settingsButton = document.querySelector(".menu button:nth-child(4)");
+const settingsBg = document.querySelector(".settings-screen");
+const settingsPanel = document.querySelector(".settings-panel");
+
+settingsButton.addEventListener("click", () => {
+
+    document.querySelector(".menu").style.opacity = "0";
+
+    settingsBg.classList.add("show");
+
+    settingsPanel.classList.add("show");
+
+});
+
+
+const closeSettings = document.querySelector(".close-settings");
+
+closeSettings.addEventListener("click", () => {
+
+    settingsBg.classList.remove("show");
+    settingsPanel.classList.remove("show");
+    document.querySelector(".menu").style.opacity = "1";
+
+});
+</script>
+
+</body>
+</html>
