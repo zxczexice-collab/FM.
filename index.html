@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Football Manager</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@900&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.menu {
+
+    position: absolute;
+
+    left: 5%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity 1s ease;
+}
+
+.menu.show {
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+}
+
+.menu button {
+
+    width: 220px;
+
+    height: 45px;
+
+    border-radius: 16px;
+
+    border: 2px solid rgba(255,255,255,0.15);
+
+    background: #6c35c9;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    transition:
+    background 0.35s ease,
+    color 0.35s ease,
+    transform 0.2s ease;
+
+}
+
+
+.menu button:active {
+
+    background: white;
+
+    color: #6c35c9;
+
+    transform: scale(0.94);
+
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+
+    background:
+    radial-gradient(circle at center, rgba(50,70,160,0.25), transparent 45%),
+    linear-gradient(135deg, #171336, #08091f);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* лёгкая текстура фона */
+body::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%);
+
+    background-size: 100px 100px;
+
+    opacity: 0.3;
+
+}
+
+
+/* логотип */
+
+.logo {
+
+    position: relative;
+
+    color: white;
+
+    font-family: "Geist", sans-serif;
+
+    font-weight: 900;
+
+    text-align: center;
+
+    text-transform: uppercase;
+
+
+    font-size: clamp(50px, 7vw, 90px);
+
+
+    line-height: 0.85;
+
+
+    letter-spacing: -4px;
+
+
+    text-shadow:
+
+    0 10px 30px rgba(0,0,0,0.7);
+
+
+    animation: intro 2s ease forwards;
+
+}
+
+
+/* появление */
+
+@keyframes intro {
+
+
+    from {
+
+        opacity:0;
+
+        transform: scale(0.85);
+
+        filter: blur(10px);
+
+    }
+
+
+    to {
+
+        opacity:1;
+
+        transform: scale(1);
+
+        filter: blur(0);
+
+    }
+
+}
+
+
+/* маленькая линия снизу логотипа */
+
+.line {
+
+    width: 180px;
+
+    height: 3px;
+
+    background:white;
+
+    margin:25px auto 0;
+
+    opacity:0.8;
+
+    animation: line 2s ease forwards;
+
+}
+
+
+@keyframes line {
+
+    from {
+
+        width:0;
+
+        opacity:0;
+
+    }
+
+
+    to {
+
+        width:180px;
+
+        opacity:0.8;
+
+    }
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="logo">
+
+    FOOTBALL<br>
+
+    MANAGER
+
+    <div class="line"></div>
+
+</div>
+
+
+
+<div class="menu">
+
+<button>NEW CAREER</button>
+<button>ACHIEVEMENTS</button>
+<button>TUTORIAL</button>
+<button>SETTINGS</button>
+<button>ABOUT US</button>
+
+</div>
+
+<script>
+
+setTimeout(() => {
+
+    const logo = document.querySelector(".logo");
+    const menu = document.querySelector(".menu");
+
+    logo.style.transition = "opacity 1s ease";
+    logo.style.opacity = "0";
+
+    setTimeout(() => {
+
+        logo.style.display = "none";
+
+        menu.classList.add("show");
+
+    }, 1000);
+
+}, 3000);
+
+</script>
+</body>
+</html>
